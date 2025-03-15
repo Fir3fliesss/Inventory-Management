@@ -1,0 +1,80 @@
+@startuml "Inventory Management ERD"
+!theme plain
+title Entity Relationship Diagram - Inventory Management System
+
+' Entities
+entity "Users" as users {
+  * id : uuid <<PK>>
+  --
+  username : text
+  email : text
+  password_hash : text
+  created_at : timestamp
+  updated_at : timestamp
+}
+
+entity "Products" as products {
+  * id : uuid <<PK>>
+  --
+  * user_id : uuid <<FK>>
+  name : text
+  barcode : text
+  category : text
+  price : numeric
+  cost : numeric
+  stock : integer
+  min_stock : integer
+  description : text
+  image_url : text
+  created_at : timestamp
+  updated_at : timestamp
+}
+
+entity "Transactions" as transactions {
+  * id : uuid <<PK>>
+  --
+  * product_id : uuid <<FK>>
+  * user_id : uuid <<FK>>
+  type : text
+  quantity : integer
+  notes : text
+  created_at : timestamp
+}
+
+entity "Categories" as categories {
+  * id : uuid <<PK>>
+  --
+  * user_id : uuid <<FK>>
+  name : text
+  description : text
+  created_at : timestamp
+}
+
+' Relationships
+users ||--o{ products : "creates"
+users ||--o{ transactions : "performs"
+users ||--o{ categories : "creates"
+products }o--|| categories : "belongs to"
+products ||--o{ transactions : "involves"
+
+' Notes
+note bottom of users
+  Menyimpan data pengguna
+  dengan kredensial login
+end note
+
+note bottom of products
+  Menyimpan informasi produk
+  termasuk stok, harga, dan kategori
+end note
+
+note bottom of transactions
+  Mencatat setiap perubahan stok
+  (masuk/keluar)
+end note
+
+note bottom of categories
+  Klasifikasi produk
+  untuk memudahkan manajemen
+end note
+@enduml

@@ -1,0 +1,64 @@
+@startuml "Inventory Management DFD"
+!theme plain
+title Data Flow Diagram - Inventory Management System
+
+' Define nodes
+actor "Pengguna" as user
+rectangle "1.0\nProses Autentikasi" as auth
+rectangle "2.0\nManajemen Produk" as prodMgmt
+rectangle "3.0\nProses Scan Barcode" as scanProc
+rectangle "4.0\nManajemen Stok" as stockMgmt
+rectangle "5.0\nGenerasi Laporan" as reportGen
+database "Users" as usersDB
+database "Products" as productsDB
+database "Transactions" as transactionsDB
+
+' User to Process flows
+user --> auth : Input Kredensial Login
+user --> auth : Registrasi User Baru
+user --> prodMgmt : Input Data Produk
+user --> scanProc : Scan Barcode
+user --> stockMgmt : Update Stok
+user --> reportGen : Request Laporan
+
+' Process to User flows
+auth --> user : Status Autentikasi
+prodMgmt --> user : Data Produk
+scanProc --> user : Hasil Scan
+stockMgmt --> user : Status Stok
+reportGen --> user : Laporan
+
+' Process to Database flows
+auth --> usersDB : Simpan/Verifikasi Data User
+prodMgmt --> productsDB : Simpan/Update Data Produk
+stockMgmt --> transactionsDB : Simpan Transaksi Stok
+stockMgmt --> productsDB : Update Stok Produk
+
+' Database to Process flows
+usersDB --> auth : Data User
+productsDB --> prodMgmt : Data Produk
+productsDB --> scanProc : Cek Produk dari Barcode
+productsDB --> stockMgmt : Data Produk untuk Stok
+productsDB --> reportGen : Data Produk untuk Laporan
+transactionsDB --> reportGen : Data Transaksi untuk Laporan
+
+' Detailed subprocesses
+note bottom of auth
+  1.1 Login
+  1.2 Register
+  1.3 Reset Password
+end note
+
+note bottom of prodMgmt
+  2.1 Tambah Produk
+  2.2 Edit Produk
+  2.3 Hapus Produk
+  2.4 Lihat Produk
+end note
+
+note bottom of stockMgmt
+  4.1 Tambah Stok
+  4.2 Kurangi Stok
+  4.3 Penyesuaian Stok
+end note
+@enduml

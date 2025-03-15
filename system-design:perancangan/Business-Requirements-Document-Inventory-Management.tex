@@ -1,0 +1,241 @@
+\documentclass[a4paper,12pt]{article}
+\usepackage{hyperref}               
+\usepackage{enumitem}               
+\usepackage{verbatim}               
+\usepackage{geometry}               
+\geometry{margin=1in}
+\usepackage{titlesec}               
+
+\title{Business Requirements Document (BRD) - Solo Inventory Manager}
+\author{}
+\date{}
+
+\begin{document}
+
+\maketitle
+\contentsline {section}{\numberline {1}Project Overview}{2}{section.1}%
+\contentsline {section}{\numberline {2}Tujuan Proyek}{2}{section.2}%
+\contentsline {section}{\numberline {3}Fitur Utama (Mobile App - Flutter)}{2}{section.3}%
+\contentsline {section}{\numberline {4}Persyaratan Fungsional}{3}{section.4}%
+\contentsline {subsection}{\numberline {4.1}Autentikasi}{3}{subsection.4.1}%
+\contentsline {subsection}{\numberline {4.2}Manajemen Produk}{3}{subsection.4.2}%
+\contentsline {subsection}{\numberline {4.3}Scan Barcode}{3}{subsection.4.3}%
+\contentsline {subsection}{\numberline {4.4}Notifikasi}{3}{subsection.4.4}%
+\contentsline {subsection}{\numberline {4.5}Laporan}{3}{subsection.4.5}%
+\contentsline {section}{\numberline {5}Persyaratan Non-Fungsional}{4}{section.5}%
+\contentsline {section}{\numberline {6}Stack Teknologi}{4}{section.6}%
+\contentsline {subsection}{\numberline {6.1}Keuntungan Penggunaan GetX}{4}{subsection.6.1}%
+\contentsline {section}{\numberline {7}Arsitektur Aplikasi}{4}{section.7}%
+\contentsline {section}{\numberline {8}Integrasi dengan Supabase}{5}{section.8}%
+\contentsline {subsection}{\numberline {8.1}HTTP Request dengan Supabase}{5}{subsection.8.1}%
+\contentsline {section}{\numberline {9}Desain Database (Supabase)}{6}{section.9}%
+\contentsline {subsection}{\numberline {9.1}Tabel Users}{6}{subsection.9.1}%
+\contentsline {subsection}{\numberline {9.2}Tabel Products}{6}{subsection.9.2}%
+\contentsline {subsection}{\numberline {9.3}Tabel Transactions}{6}{subsection.9.3}%
+\contentsline {section}{\numberline {10}Manajemen Risiko}{7}{section.10}%
+\newpage
+
+\section{Project Overview}
+\begin{itemize}[leftmargin=1.5cm]
+    \item \textbf{Nama Proyek:} Solo Inventory Manager
+    \item \textbf{Platform:} Mobile (Flutter 3.27) dengan fokus pada iOS
+    \item \textbf{Target Pengguna:} UMKM dengan 10-100 produk
+    \item \textbf{Tim Pengembang:} Gheraldy Moses Tarigan
+    \item \textbf{Periode Pengembangan:} 1 Minggu
+\end{itemize}
+
+\section{Tujuan Proyek}
+\begin{itemize}[leftmargin=1.5cm]
+    \item Memantau stok barang secara real-time
+    \item Mencatat transaksi masuk/keluar barang
+    \item Memberi notifikasi otomatis saat stok minimum
+    \item Membuat laporan bulanan sederhana
+\end{itemize}
+
+\section{Fitur Utama (Mobile App - Flutter)}
+\begin{enumerate}[leftmargin=1.5cm]
+    \item \textbf{Autentikasi}
+    \begin{itemize}
+        \item Login dengan username/password
+        \item Register akun baru
+        \item Reset password
+    \end{itemize}
+    \item \textbf{Manajemen Produk}
+    \begin{itemize}
+        \item Tambah, edit, lihat, dan hapus produk
+        \item Filter produk berdasarkan kategori
+    \end{itemize}
+    \item \textbf{Scan Barcode}
+    \begin{itemize}
+        \item Scan barcode untuk identifikasi produk cepat
+        \item Input stok via kamera
+    \end{itemize}
+    \item \textbf{Notifikasi}
+    \begin{itemize}
+        \item Peringatan stok rendah
+    \end{itemize}
+    \item \textbf{Laporan}
+    \begin{itemize}
+        \item Laporan bulanan sederhana
+        \item Statistik inventaris dasar
+    \end{itemize}
+\end{enumerate}
+
+\section{Persyaratan Fungsional}
+\subsection{Autentikasi}
+\begin{itemize}[leftmargin=1.5cm]
+    \item Sistem harus memungkinkan pengguna membuat akun baru dengan username dan password.
+    \item Sistem harus memungkinkan pengguna login dengan kredensial yang sudah terdaftar.
+    \item Sistem harus memungkinkan pengguna reset password jika lupa.
+    \item Sistem harus menjaga sesi login pengguna.
+\end{itemize}
+
+\subsection{Manajemen Produk}
+\begin{itemize}[leftmargin=1.5cm]
+    \item Sistem harus memungkinkan pengguna menambah produk baru dengan nama, kode, harga, stok, dan kategori.
+    \item Sistem harus memungkinkan pengguna mengedit produk yang ada.
+    \item Sistem harus memungkinkan pengguna menghapus produk.
+    \item Sistem harus menampilkan daftar produk dengan opsi filter dan pencarian.
+\end{itemize}
+
+\subsection{Scan Barcode}
+\begin{itemize}[leftmargin=1.5cm]
+    \item Sistem harus memungkinkan pengguna melakukan scan barcode produk.
+    \item Sistem harus dapat mencari produk berdasarkan hasil scan barcode.
+    \item Sistem harus memungkinkan penambahan stok dengan memindai barcode.
+\end{itemize}
+
+\subsection{Notifikasi}
+\begin{itemize}[leftmargin=1.5cm]
+    \item Sistem harus mengirim notifikasi saat stok produk mencapai batas minimum.
+    \item Sistem harus menampilkan daftar produk dengan stok rendah.
+\end{itemize}
+
+\subsection{Laporan}
+\begin{itemize}[leftmargin=1.5cm]
+    \item Sistem harus menghasilkan laporan bulanan tentang pergerakan inventaris.
+    \item Sistem harus menampilkan statistik dasar seperti produk terlaris dan produk dengan perputaran lambat.
+\end{itemize}
+
+\section{Persyaratan Non-Fungsional}
+\begin{itemize}[leftmargin=1.5cm]
+    \item Optimasi untuk iOS dan macOS development.
+    \item Waktu respons aplikasi $<$ 1 detik.
+    \item Keamanan: Enkripsi data pengguna.
+    \item Koneksi internet dibutuhkan karena full menggunakan Supabase.
+\end{itemize}
+
+\section{Stack Teknologi}
+\begin{itemize}[leftmargin=1.5cm]
+    \item \textbf{Frontend:} Flutter dengan komponen UI library (misalnya, Flutter UI Kit, GetX UI).
+    \item \textbf{State Management:} GetX.
+    \item \textbf{Database:} Supabase (cloud).
+    \item \textbf{API:} GetX HTTP client atau Dio untuk HTTP requests ke Supabase.
+    \item \textbf{Autentikasi:} Supabase Auth.
+    \item \textbf{Lainnya:} Camera plugin, Barcode Scanner.
+\end{itemize}
+
+\subsection{Keuntungan Penggunaan GetX}
+GetX sangat berguna untuk proyek ini karena:
+\begin{itemize}[leftmargin=1.5cm]
+    \item State management yang lebih mudah dipelajari dibandingkan BLoC.
+    \item Menyediakan dependency injection yang ringan.
+    \item Memiliki navigasi dan route management terintegrasi.
+    \item Memiliki HTTP client bawaan.
+    \item Mengurangi boilerplate code.
+    \item Membantu membuat UI reaktif dengan lebih mudah.
+\end{itemize}
+
+\section{Arsitektur Aplikasi}
+Aplikasi akan menggunakan arsitektur yang disarankan GetX dengan struktur folder berikut:
+\begin{verbatim}
+lib/
+	| --- main.dart
+	|-- app/
+	|   `-- app.dart
+	|-- core/
+	|   |-- constants/
+	|   |-- theme/
+	|   |-- utils/
+	|   `-- values/
+	|-- data/
+	|   |-- models/
+	|   |-- providers/
+	|   |   `-- supabase_provider.dart
+	|   `-- services/
+	|       |-- auth_service.dart
+	|       |-- product_service.dart
+	|       `-- report_service.dart
+	|-- modules/
+	|   |-- auth/
+	|   |   |-- controllers/
+	|   |   |-- views/
+	|   |   `-- bindings/
+	|   |-- home/
+	|   |-- product/
+	|   |-- scanner/
+	|   `-- report/
+	`-- routes/
+ 	   `-- app_pages.dart
+\end{verbatim}
+
+\section{Integrasi dengan Supabase}
+Supabase akan digunakan untuk semua fungsionalitas berikut:
+\begin{itemize}[leftmargin=1.5cm]
+    \item \textbf{Auth:} Menggunakan Supabase Auth untuk manajemen autentikasi.
+    \item \textbf{Database:} Penyimpanan data produk, transaksi, dan user di Supabase PostgreSQL.
+    \item \textbf{API:} REST API untuk komunikasi antara aplikasi dan database.
+    \item \textbf{Realtime:} Menggunakan fitur realtime subscription untuk notifikasi.
+\end{itemize}
+
+\subsection{HTTP Request dengan Supabase}
+Aplikasi akan menjalankan HTTP request melalui Supabase SDK untuk Flutter untuk:
+\begin{itemize}[leftmargin=1.5cm]
+    \item Autentikasi (login, register).
+    \item CRUD operasi pada tabel (produk, transaksi).
+    \item Query data untuk laporan dan statistik.
+\end{itemize}
+
+\section{Desain Database (Supabase)}
+\subsection{Tabel Users}
+\begin{itemize}[leftmargin=1.5cm]
+    \item \textbf{id:} UUID, primary key.
+    \item \textbf{username:} text, unique.
+    \item \textbf{email:} text, unique.
+    \item \textbf{created\_at:} timestamp.
+\end{itemize}
+
+\subsection{Tabel Products}
+\begin{itemize}[leftmargin=1.5cm]
+    \item \textbf{id:} UUID, primary key.
+    \item \textbf{name:} text.
+    \item \textbf{barcode:} text.
+    \item \textbf{category:} text.
+    \item \textbf{price:} numeric.
+    \item \textbf{stock:} integer.
+    \item \textbf{min\_stock:} integer.
+    \item \textbf{user\_id:} UUID, foreign key.
+    \item \textbf{created\_at:} timestamp.
+    \item \textbf{updated\_at:} timestamp.
+\end{itemize}
+
+\subsection{Tabel Transactions}
+\begin{itemize}[leftmargin=1.5cm]
+    \item \textbf{id:} UUID, primary key.
+    \item \textbf{product\_id:} UUID, foreign key.
+    \item \textbf{type:} text --- ``in'' atau ``out''.
+    \item \textbf{quantity:} integer.
+    \item \textbf{notes:} text.
+    \item \textbf{user\_id:} UUID, foreign key.
+    \item \textbf{created\_at:} timestamp.
+\end{itemize}
+
+\section{Manajemen Risiko}
+\begin{itemize}[leftmargin=1.5cm]
+    \item Keterlambatan karena single developer.
+    \item Ketergantungan pada koneksi internet (Supabase).
+    \item Kompatibilitas library kamera pada iOS.
+    \item Kurva pembelajaran GetX.
+\end{itemize}
+
+\end{document}

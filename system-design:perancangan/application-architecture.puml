@@ -1,0 +1,90 @@
+@startuml "Inventory Management Architecture"
+!theme plain
+title Arsitektur Aplikasi Inventory Management dengan GetX
+
+package "Flutter Application" {
+  [Presentation Layer\n(UI Components)] as UI
+  [GetX Bindings] as Bindings
+  [GetX Controllers] as Controllers
+  [Service Layer] as Services
+  [Data Providers] as Providers
+  [GetX State Management] as GetxState
+  [GetX Route Management] as GetxRouter
+}
+
+actor "Pengguna" as User
+cloud "Supabase API" as SupabaseAPI {
+  database "Auth" as SupabaseAuth
+  database "Database" as SupabaseDB
+  database "Storage" as SupabaseStorage
+}
+
+' Main Flow
+User --> UI
+UI --> Bindings
+Bindings --> Controllers
+Controllers --> Services
+Services --> Providers
+Providers --> SupabaseAPI
+
+' GetX State Management
+Controllers --> GetxState
+GetxState --> UI : Update UI
+
+' Route Management
+UI --> GetxRouter
+GetxRouter --> UI : Navigate
+
+' Supabase Components
+SupabaseAPI --> SupabaseAuth
+SupabaseAPI --> SupabaseDB
+SupabaseAPI --> SupabaseStorage
+
+package "Application Modules" {
+  [Auth Module] as AuthModule
+  [Home Module] as HomeModule
+  [Product Module] as ProductModule
+  [Scanner Module] as ScannerModule
+  [Report Module] as ReportModule
+}
+
+' Connect Modules to Controllers
+AuthModule --- Controllers
+HomeModule --- Controllers
+ProductModule --- Controllers
+ScannerModule --- Controllers
+ReportModule --- Controllers
+
+package "Module Structure (Example: Product Module)" {
+  [Views\n(UI Screens)] as ProductView
+  [Controller\n(Business Logic)] as ProductController
+  [Binding\n(Dependency Injection)] as ProductBinding
+  [Service\n(Data Operations)] as ProductService
+  [Models\n(Data Structure)] as ProductModel
+
+  ProductBinding --> ProductController
+  ProductController --> ProductService
+  ProductService --> ProductModel
+  ProductView --> ProductController
+}
+
+' Styling
+skinparam rectangle {
+  RoundCorner 25
+}
+
+note right of UI
+  Tampilan yang dilihat user
+  (Screens, Widgets)
+end note
+
+note right of Controllers
+  GetX Controller menangani
+  logika bisnis & state
+end note
+
+note right of SupabaseAPI
+  Cloud Database &
+  Authentication Provider
+end note
+@enduml

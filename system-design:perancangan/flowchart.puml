@@ -1,0 +1,102 @@
+@startuml "Inventory Management Flowchart"
+!theme plain
+title Flowchart Aplikasi Inventory Management
+
+start
+:Mulai Aplikasi;
+
+if (Sudah Login?) then (Ya)
+else (Tidak)
+  :Tampilkan Login/Register Screen;
+
+  if (Pilihan User) then (Login)
+    :Proses Login;
+  else (Register)
+    :Proses Register;
+    :Proses Login;
+  endif
+
+  if (Login Valid?) then (Ya)
+  else (Tidak)
+    :Tampilkan Login/Register Screen;
+    stop
+  endif
+endif
+
+:Tampilkan Dashboard;
+
+repeat
+  switch (Menu Yang Dipilih)
+
+  case (Manajemen Produk)
+    :Lihat Daftar Produk;
+
+    split
+      :Filter Produk;
+    split again
+      :Cari Produk;
+    split again
+      :Tambah Produk Baru;
+      :Kembali ke Daftar Produk;
+    split again
+      :Pilih Produk;
+      :Tampilkan Detail Produk;
+
+      split
+        :Edit Produk;
+        :Kembali ke Daftar Produk;
+      split again
+        :Hapus Produk;
+        :Kembali ke Daftar Produk;
+      split again
+        :Tambah Stok;
+        :Kembali ke Detail Produk;
+      split again
+        :Kurangi Stok;
+        :Kembali ke Detail Produk;
+      end split
+    end split
+
+  case (Scan Barcode)
+    :Aktivasi Kamera;
+    :Scan Barcode;
+
+    if (Barcode Ditemukan?) then (Ya)
+      :Tampilkan Detail Produk;
+    else (Tidak)
+      :Tampilkan Form Tambah Produk Baru;
+      :Kembali ke Daftar Produk;
+    endif
+
+  case (Laporan)
+    :Lihat Menu Laporan;
+
+    split
+      :Laporan Stok;
+      :Export Laporan Stok (PDF/CSV);
+    split again
+      :Laporan Transaksi;
+      :Filter Berdasarkan Tanggal;
+      :Export Laporan Transaksi (PDF/CSV);
+    end split
+
+  case (Profil)
+    :Tampilkan Profil;
+
+    split
+      :Edit Profil;
+    split again
+      :Ubah Password;
+    end split
+
+  case (Logout)
+    :Proses Logout;
+    :Kembali ke Login Screen;
+    stop
+
+  endswitch
+
+repeat while (Kembali ke Dashboard) is (Ya)
+
+stop
+@enduml
