@@ -52,6 +52,11 @@ class DashboardPage extends StatelessWidget {
                 onTap: () => Get.toNamed(AppRoutes.productList),
               ),
               ListTile(
+                leading: const Icon(Icons.category),
+                title: const Text('Manajemen Kategori'),
+                onTap: () => Get.toNamed(AppRoutes.categoryList),
+              ),
+              ListTile(
                 leading: const Icon(Icons.qr_code),
                 title: const Text('Scan Barcode'),
                 onTap: () {}, // Nanti dihubungkan ke halaman scanner

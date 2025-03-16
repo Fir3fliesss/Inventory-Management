@@ -13,7 +13,7 @@ class ProductDetailPage extends StatelessWidget {
     final ProductController controller = Get.find<ProductController>();
 
     return FutureBuilder<Map<String, dynamic>>(
-      future: controller.getProductById(productId),
+      future: controller.getProductById(productId), // Gunakan metode publik
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return const Scaffold(
@@ -54,7 +54,8 @@ class ProductDetailPage extends StatelessWidget {
                     ),
                   );
                   if (confirm == true) {
-                    controller.deleteProduct(productId);
+                    await controller.deleteProduct(productId);
+                    Get.back();
                   }
                 },
               ),
