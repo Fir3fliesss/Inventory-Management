@@ -3,6 +3,10 @@ import 'package:get/get.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:inventory_management/app/routes/app_pages.dart';
 
+// ! : Add transactions feature
+// ! : Fix min stock bug
+// TODO : Add monthly report feature
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
