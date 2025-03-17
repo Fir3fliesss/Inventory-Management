@@ -3,9 +3,9 @@ import 'package:get/get.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:inventory_management/app/routes/app_pages.dart';
 
-// ! : Add transactions feature
-// ! : Fix min stock bug
-// TODO : Add monthly report feature
+//! GAK MASUK AKAL BUAT FITUR INI SEKARANG
+//! : Add scan barcode feature
+// ! : Add filter and seach feature in inventory list
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -13,9 +13,9 @@ void main() async {
   // Inisialisasi Supabase
   await Supabase.initialize(
     url:
-        'https://nxxwcksyybzmhhrrvjij.supabase.co', // Ganti dengan URL Supabase Anda
+        'https://nxxwcksyybzmhhrrvjij.supabase.co',
     anonKey:
-        'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im54eHdja3N5eWJ6bWhocnJ2amlqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDIwNDQyNTksImV4cCI6MjA1NzYyMDI1OX0.R52nC9_AFMc73jwarVqCedf9SX8dU3aYtD8Qo3OU97w', // Ganti dengan Anon Key Supabase Anda
+        'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im54eHdja3N5eWJ6bWhocnJ2amlqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDIwNDQyNTksImV4cCI6MjA1NzYyMDI1OX0.R52nC9_AFMc73jwarVqCedf9SX8dU3aYtD8Qo3OU97w',
   );
 
   // Inisialisasi Supabase Client

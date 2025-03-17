@@ -129,4 +129,38 @@ class ProductRepository {
       throw Exception('Failed to fetch low stock products: $e');
     }
   }
+
+  Future<int> getLowStockCount() async {
+    try {
+      final user = _supabase.auth.currentUser;
+      if (user == null) {
+        throw Exception('Pengguna tidak terautentikasi');
+      }
+
+      // Get all products for the user
+      final response = await _supabase
+          .from('products')
+          .select('stock, min_stock')
+          .eq('user_id', user.id);
+
+      // Convert response to List<Map<String, dynamic>>
+      final List<Map<String, dynamic>> allProducts =
+          (response as List).map((item) => item as Map<String, dynamic>).toList();
+
+      // Count products where stock < min_stock
+      int lowStockCount = 0;
+      for (var product in allProducts) {
+        final int stock = product['stock'] ?? 0;
+        final int minStock = product['min_stock'] ?? 0;
+        if (stock < minStock) {
+          lowStockCount++;
+        }
+      }
+
+      return lowStockCount;
+    } catch (e) {
+      print('Error in getLowStockCount: $e');
+      throw Exception('Failed to fetch low stock count: $e');
+    }
+  }
 }

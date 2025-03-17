@@ -36,7 +36,6 @@ class ProductController extends GetxController {
   Future<void> addProduct(Map<String, dynamic> productData) async {
     isLoading.value = true;
     try {
-      // Create a new map to avoid modifying the original
       final Map<String, dynamic> sanitizedData = {...productData};
 
       // Ensure all numeric fields are properly converted
@@ -64,25 +63,20 @@ class ProductController extends GetxController {
         }
       }
 
-      // Debug log to see what's being sent
-      print('Sending sanitized data to repository: $sanitizedData');
-
       await _repository.addProduct(sanitizedData);
       fetchProducts(); // Refresh daftar produk
-      Get.back(); // Kembali ke daftar produk
+      Get.offNamed('/products'); // Navigate back to product list with back button
       Get.snackbar('Sukses', 'Produk berhasil ditambahkan');
     } catch (e) {
-      print('Error details: $e'); // More detailed error logging
       Get.snackbar('Error', 'Gagal menambah produk: $e');
     } finally {
       isLoading.value = false;
     }
   }
 
-Future<void> updateProduct(String productId, Map<String, dynamic> updates) async {
+  Future<void> updateProduct(String productId, Map<String, dynamic> updates) async {
     isLoading.value = true;
     try {
-      // Create a new map to avoid modifying the original
       final Map<String, dynamic> sanitizedUpdates = {...updates};
 
       // Ensure all numeric fields are properly converted
@@ -110,15 +104,11 @@ Future<void> updateProduct(String productId, Map<String, dynamic> updates) async
         }
       }
 
-      // Debug log
-      print('Sending sanitized updates to repository: $sanitizedUpdates');
-
       await _repository.updateProduct(productId, sanitizedUpdates);
       fetchProducts(); // Refresh daftar produk
-      Get.back(); // Kembali ke daftar produk
+      Get.offNamed('/products'); // Navigate back to product list with back button
       Get.snackbar('Sukses', 'Produk berhasil diperbarui');
     } catch (e) {
-      print('Error details: $e'); // More detailed error logging
       Get.snackbar('Error', e.toString());
     } finally {
       isLoading.value = false;
