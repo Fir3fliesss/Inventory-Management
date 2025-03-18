@@ -80,14 +80,14 @@ repeat
       :Export Laporan Transaksi (PDF/CSV);
     end split
 
-  case (Profil)
-    :Tampilkan Profil;
+  ' case (Profil)
+  '   :Tampilkan Profil;
 
-    split
-      :Edit Profil;
-    split again
-      :Ubah Password;
-    end split
+  '   split
+  '     :Edit Profil;
+  '   split again
+  '     :Ubah Password;
+  '   end split
 
   case (Logout)
     :Proses Logout;

@@ -87,11 +87,11 @@ class DashboardPage extends StatelessWidget {
                 onTap: () => Get.toNamed(
                     AppRoutes.transactionList),
               ),
-              // ListTile(
-              //   leading: const Icon(Icons.qr_code),
-              //   title: const Text('Scan Barcode'),
-              //   onTap: () {},
-              // ),
+              ListTile(
+                leading: const Icon(Icons.qr_code),
+                title: const Text('Scan Barcode'),
+                onTap: () => Get.toNamed(AppRoutes.scanBarcode),
+              ),
               ListTile(
                 leading: const Icon(Icons.report),
                 title: const Text('Laporan'),

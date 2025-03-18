@@ -2,22 +2,96 @@
 import 'package:get/get.dart';
 import '../data/product_repository.dart';
 
+// Add this import
+import '../../search_filter/domain/search_filter_controller.dart';
+
 class ProductController extends GetxController {
   final ProductRepository _repository = ProductRepository();
+  // Add search filter controller
+  final SearchFilterController searchFilter = Get.put(SearchFilterController());
 
   RxList<Map<String, dynamic>> products = <Map<String, dynamic>>[].obs;
+  // Add this if it's not already there
+  RxList<Map<String, dynamic>> filteredProducts = <Map<String, dynamic>>[].obs;
+
+  void applyFilters() {
+    var result = List<Map<String, dynamic>>.from(products);
+
+    // Apply search query filter
+    if (searchFilter.searchQuery.value.isNotEmpty) {
+      final query = searchFilter.searchQuery.value.toLowerCase();
+      result = result.where((product) =>
+          product['name'].toString().toLowerCase().contains(query) ||
+          (product['barcode']?.toString().toLowerCase() ?? '').contains(query)
+      ).toList();
+    }
+
+    // Apply category filter - improved to handle different category field structures
+    if (searchFilter.selectedCategory.value.isNotEmpty &&
+        searchFilter.selectedCategory.value != 'all') {
+      result = result.where((product) {
+        // Check different possible category field names
+        final productCategoryId = product['category_id']?.toString() ??
+                                 product['categoryId']?.toString() ??
+                                 '';
+
+        return productCategoryId == searchFilter.selectedCategory.value;
+      }).toList();
+    }
+
+    // Apply low stock filter
+    if (searchFilter.showLowStockOnly.value) {
+      result = result.where((product) =>
+          (product['stock'] ?? 0) <= (product['min_stock'] ?? 0)
+      ).toList();
+    }
+
+    // Apply sorting
+    result.sort((a, b) {
+      final field = searchFilter.sortBy.value;
+      final ascending = searchFilter.sortAscending.value;
+
+      dynamic valueA = a[field];
+      dynamic valueB = b[field];
+
+      // Handle null values
+      if (valueA == null && valueB == null) return 0;
+      if (valueA == null) return ascending ? -1 : 1;
+      if (valueB == null) return ascending ? 1 : -1;
+
+      // Compare based on type
+      int comparison;
+      if (valueA is num && valueB is num) {
+        comparison = valueA.compareTo(valueB);
+      } else {
+        comparison = valueA.toString().compareTo(valueB.toString());
+      }
+
+      return ascending ? comparison : -comparison;
+    });
+
+    filteredProducts.value = result;
+  }
   RxBool isLoading = false.obs;
 
   @override
   void onInit() {
     super.onInit();
     fetchProducts();
+
+    // Listen to changes in search filter
+    ever(searchFilter.searchQuery, (_) => applyFilters());
+    ever(searchFilter.selectedCategory, (_) => applyFilters());
+    ever(searchFilter.showLowStockOnly, (_) => applyFilters());
+    ever(searchFilter.sortBy, (_) => applyFilters());
+    ever(searchFilter.sortAscending, (_) => applyFilters());
   }
 
   Future<void> fetchProducts() async {
     isLoading.value = true;
     try {
       products.value = await _repository.getAllProducts();
+      applyFilters();
     } catch (e) {
       Get.snackbar('Error', 'Gagal memuat data: $e');
     } finally {
@@ -172,5 +246,73 @@ class ProductController extends GetxController {
     } finally {
       isLoading.value = false;
     }
+  }
+
+  // Improved method to extract categories from products
+  List<Map<String, dynamic>> getUniqueCategories() {
+    final uniqueCategories = <Map<String, dynamic>>[];
+    final categoryIds = <String>{};
+    final categoryNames = <String>{};  // Track unique names too
+
+    // Debug: Print the first product to see its structure
+    if (products.isNotEmpty) {
+      print('First product structure: ${products.first}');
+    }
+
+    for (var product in products) {
+      // Try to get category ID from different possible field names
+      final categoryId = product['category_id']?.toString() ??
+                         product['categoryId']?.toString() ?? '';
+
+      // Try to get category name from different possible field names
+      String categoryName = '';
+      if (product['category_name'] != null) {
+        categoryName = product['category_name'].toString();
+      } else if (product['categoryName'] != null) {
+        categoryName = product['categoryName'].toString();
+      } else if (product['category'] != null) {
+        categoryName = product['category'].toString();
+      } else {
+        // If no category name is found, use a more descriptive fallback
+        categoryName = 'Kategori ${categoryId.substring(0, categoryId.length > 5 ? 5 : categoryId.length)}';
+      }
+
+      // Ensure both ID and name are unique
+      if (categoryId.isNotEmpty && !categoryIds.contains(categoryId)) {
+        categoryIds.add(categoryId);
+
+        // Ensure category name is unique by appending a number if needed
+        String uniqueName = categoryName;
+        int counter = 1;
+        while (categoryNames.contains(uniqueName)) {
+          uniqueName = '$categoryName ($counter)';
+          counter++;
+        }
+        categoryNames.add(uniqueName);
+
+        uniqueCategories.add({
+          'id': categoryId,
+          'name': uniqueName,
+        });
+
+        // Debug: Print each extracted category
+        print('Extracted category: ID=$categoryId, Name=$uniqueName');
+      }
+    }
+
+    return uniqueCategories;
+  }
+  // Add this method to get category name by ID
+  String getCategoryName(String categoryId) {
+    if (categoryId.isEmpty) return 'Tidak ada kategori';
+
+    // Find the category in the unique categories
+    final categories = getUniqueCategories();
+    final category = categories.firstWhere(
+      (cat) => cat['id'] == categoryId,
+      orElse: () => {'name': 'Kategori tidak ditemukan'},
+    );
+
+    return category['name']?.toString() ?? 'Kategori tidak ditemukan';
   }
 }

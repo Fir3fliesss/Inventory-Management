@@ -12,6 +12,7 @@ import 'package:inventory_management/app/core/features/category/presentation/pag
 import 'package:inventory_management/app/core/features/transactions/presentation/pages/transaction_list_page.dart';
 import 'package:inventory_management/app/core/features/transactions/presentation/pages/add_transaction_page.dart';
 import 'package:inventory_management/app/core/features/report/presentation/pages/report_page.dart';
+import 'package:inventory_management/app/core/features/scan_barcode/presentation/pages/scan_barcode_page.dart';
 
 class AppRoutes {
   static const String login = '/login';
@@ -27,6 +28,7 @@ class AppRoutes {
   static const String addTransaction = '/transaction/add';
   static const String lowStock = '/products/low-stock';
   static const String report = '/report';
+  static const String scanBarcode = '/scan-barcode';
 
   static List<GetPage> routes = [
     GetPage(name: login, page: () => const LoginPage()),
@@ -51,5 +53,6 @@ class AppRoutes {
     GetPage(name: addTransaction, page: () => const AddTransactionPage()),
     GetPage(name: lowStock, page: () => const LowStockPage()),
     GetPage(name: report, page: () => const ReportPage()),
+    GetPage(name: scanBarcode, page: () => const ScanBarcodePage()),
   ];
 }

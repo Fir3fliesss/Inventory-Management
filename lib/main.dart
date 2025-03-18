@@ -3,10 +3,6 @@ import 'package:get/get.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:inventory_management/app/routes/app_pages.dart';
 
-//! GAK MASUK AKAL BUAT FITUR INI SEKARANG
-//! : Add scan barcode feature
-// ! : Add filter and seach feature in inventory list
-
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
