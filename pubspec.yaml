@@ -42,7 +42,7 @@ dependencies:
   path_provider: ^2.1.5
   barcode_scan2: ^4.5.0
   permission_handler: ^11.4.0
-  flutter_barcode_scanner: ^2.0.0
+  flutter_barcode_scanner: ^2.0.0  # Update to the latest version
 
 dev_dependencies:
   flutter_test:
